@@ -1,5 +1,9 @@
 <template>
-    <div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-between" style="
+    background-color: white;
+    height: 50px;
+    padding: 10px;
+">
         <div class="mr-auto p-2">
             <a href="#" target="_blank">Webike</a>
             <span class="ml-1">&copy; {{ new Date().getFullYear() }}.</span>
@@ -16,4 +20,7 @@ export default {
     name: 'TheFooter'
 }
 </script>
+
+<style >
+</style>
   

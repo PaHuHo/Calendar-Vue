@@ -1,34 +1,10 @@
 <template>
-<!-- <div class="p-menubar p-component font-medium">
-    <div class="p-menubar-start">
-        <img alt="logo" src="img/logo.png" height="40" class="mr-2"/>
+    <div class="p-menubar p-component font-medium" style="margin-bottom: 10px;">
+        <div class="p-menubar-start">
+            <img alt="logo" src="http://gbm.webike.net/sm/images/logo.png" height="40" class="mr-2" />
+        </div>
     </div>
-    <ul class="p-menubar-root-list">
-        <li class="p-menuitem">
-            <a href="" class="p-menuitem-lick router-link-active router-link-active-exact" >
-                <span class="p-menuitem-icon fas fa-home"></span>
-                <span>Dashboard</span>
-            </a>
-        </li>
-        <li class="p-menuitem">
-            <a href="" class="p-menuitem-lick router-link-active router-link-active-exact" >
-                <span class="p-menuitem-icon fas fa-hand-holding-usd"></span>
-                <span>Pricing</span>
-            </a>
-        </li> <li class="p-menuitem">
-            <a href="" class="p-menuitem-lick router-link-active router-link-active-exact" >
-                <span class="p-menuitem-icon fas fa-home"></span>
-                <span>Dashboard</span>
-            </a>
-        </li> <li class="p-menuitem">
-            <a href="" class="p-menuitem-lick router-link-active router-link-active-exact" >
-                <span class="p-menuitem-icon fas fa-home"></span>
-                <span>Dashboard</span>
-            </a>
-        </li>
-    </ul>
-</div> -->
-<div class="nav-bar navbar navbar-expand-lg navbar-light bg-light">
+    <!-- <div class="nav-bar navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid " style="padding-left:0;margin-left: 170px;">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#NavCollapse"
                 aria-controls="NavCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,7 +17,7 @@
                         <li class="nav-item d-none d-sm-inline-block">
                             <router-link to="/">Calendar</router-link>
                         </li>
-                        
+
                     </ul>
 
                     <ul class="navbar-nav flex">
@@ -56,7 +32,7 @@
             </div>
         </div>
 
-    </div>
+    </div> -->
 
 </template>
 
@@ -72,7 +48,8 @@
     -webkit-box-shadow: 0px 2px 15px -12px rgba(0, 0, 0, 0.57);
     -moz-box-shadow: 0px 2px 15px -12px rgba(0, 0, 0, 0.57);
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.57);
-  }
+}
+
 .p-menubar {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -88,20 +65,26 @@
     color: #495057;
     border: 1px solid #dee2e6;
 }
+
 .font-medium {
-    font-weight: 500!important;
+    font-weight: 500 !important;
 }
-.p-component, .p-component * {
+
+.p-component,
+.p-component * {
     box-sizing: border-box;
 }
+
 .p-component {
-    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
     font-size: 1rem;
     font-weight: 400;
 }
+
 .mr-2 {
-    margin-right: 0.5rem!important;
+    margin-right: 0.5rem !important;
 }
+
 .p-menubar-button {
     display: none;
     cursor: pointer;
@@ -113,11 +96,13 @@
     justify-content: center;
     text-decoration: none;
 }
+
 .p-menubar ul {
     margin: 0;
     padding: 0;
     list-style: none;
 }
+
 .p-menubar-root-list {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -126,13 +111,16 @@
     -ms-flex-align: center;
     align-items: center;
 }
+
 .p-menubar .p-menuitem {
     font-size: 20px;
     position: relative;
 }
+
 .p-menubar .p-menuitem-link.router-link-active-exact {
     background: #eff6ff;
 }
+
 .p-menubar .p-menubar-root-list>.p-menuitem>.p-menuitem-link {
     padding: 0.75rem 1.25rem;
     color: #495057;
@@ -142,6 +130,7 @@
     -moz-user-select: none;
     user-select: none;
 }
+
 .p-menubar .p-menuitem-link {
     cursor: pointer;
     display: -webkit-box;
@@ -154,6 +143,7 @@
     overflow: hidden;
     position: relative;
 }
+
 .p-menubar .p-menuitem-link {
     padding: 0.75rem 1.25rem;
     color: #495057;
@@ -163,23 +153,29 @@
     -moz-user-select: none;
     user-select: none;
 }
+
 .p-menubar .p-menubar-root-list>.p-menuitem>.p-menuitem-link .p-menuitem-icon {
     color: #6c757d;
     margin-right: 0.5rem;
 }
+
 p-menubar .p-menuitem-link .p-menuitem-icon {
     color: #6c757d;
     margin-right: 0.5rem;
 }
+
 .p-menubar .p-menuitem-link.router-link-active-exact .p-menuitem-text {
     color: #1d4ed8;
 }
+
 .p-menubar .p-menubar-root-list>.p-menuitem>.p-menuitem-link .p-menuitem-text {
     color: #495057;
 }
+
 .p-menubar .p-menuitem-link .p-menuitem-text {
     color: #495057;
 }
+
 .p-menubar .p-menuitem-text {
     line-height: 1;
 }

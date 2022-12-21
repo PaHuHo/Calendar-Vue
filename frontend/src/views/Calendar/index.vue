@@ -139,7 +139,7 @@
             </div>
         </div>
     </div>
-
+    <FooterVue></FooterVue>
     <!-- Model  -->
     <div class="modal fade " id="createForm" tabindex="-1" role="dialog" data-backdrop="false"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -248,6 +248,14 @@ export default {
         this.getListEvent()
         this.$nextTick(function () {
             this.makeDraggable()
+            
+            $('.fc-toolbar-chunk').css({
+                "display": "inline-flex"
+            })
+            $('.fc .fc-prev-button').css({
+                "padding": "0", "font-size": "18px", "height": "30px", "width": "40px",
+            })
+            $('.fc .fc-next-button').css({"padding": "0", "font-size": "18px", "height": "30px", "width": "40px"})
         })
     },
     created() {
@@ -393,11 +401,11 @@ export default {
                     interactionPlugin // needed for dateClick
                 ],
                 initialView: 'dayGridMonth',
-
+                contentHeight: 800,
                 headerToolbar: {
-                    left: 'prev',
-                    center: 'title',
-                    right: 'next'
+                    left: '',
+                    center: 'prev title next',
+                    right: ''
                 },
                 editable: true,
                 dragRevertDuration: 0,
@@ -418,10 +426,10 @@ export default {
     },
 
     methods: {
-        resetForm() {
-            this.eventFormPopAdd.title = '',
-                this.eventFormPopAdd.short_story = '',
-                this.eventFormPopAdd.start = ''
+        resetFormPopup() {
+            this.eventFormPopAdd.title = ''
+            this.eventFormPopAdd.short_story = ''
+            this.eventFormPopAdd.start = ''
             this.eventFormPopAdd.end = ''
 
             this.eventFormPopAdd.color = this.colorPickerPop[0].color
@@ -430,10 +438,22 @@ export default {
             this.eventFormPopAdd.icon = this.iconPickerPopup[0].icon
             this.iconSelectPopup = this.iconPickerPopup[0].id
         },
+        resetForm() {
+            this.eventFormAdd.title = ''
+            this.eventFormAdd.short_story = ''
+            this.eventFormAdd.start = ''
+            this.eventFormAdd.end = ''
+
+            this.eventFormAdd.color = this.colorPicker[0].color
+            this.colorSelect = this.colorPickerPop[0].id
+
+            this.eventFormAdd.icon = this.iconPicker[0].icon
+            this.iconSelect = this.iconPicker[0].id
+        },
         async addEventPopIntoCalendar() {
-            await axios.post("http://127.0.0.1:8000/api/calendar/add-new-event", {
+            await axios.post("http://192.168.55.44/api/calendar/add-new-event", {
                 title: this.eventFormPopAdd.title,
-                short_story: this.eventFormPopAdd.short_story,
+                short_story: this.eventFormPopAdd.short_story ? this.eventFormPopAdd.short_story : 'no description',
                 icon: this.eventFormPopAdd.icon,
                 color: this.eventFormPopAdd.color,
                 start: this.eventFormPopAdd.start,
@@ -441,7 +461,7 @@ export default {
             })
             await this.getListEvent()
             this.calendarOptions.events = await getCalendar()
-            this.resetForm()
+            this.resetFormPopup()
 
             $('#createForm').modal('toggle');
         },
@@ -449,7 +469,7 @@ export default {
             var id = e.draggedEl.getAttribute('data-eventid')
             var start = e.dateStr
             var end = e.dateStr
-            await axios.post("http://127.0.0.1:8000/api/calendar/add/" + id, {
+            await axios.post("http://192.168.55.44/api/calendar/add/" + id, {
                 start: start,
                 end: end
             })
@@ -484,7 +504,7 @@ export default {
             var id = e.event.id
             var start = e.event.start
             var end = e.event.end ? e.event.end : e.event.start
-            await axios.post("http://127.0.0.1:8000/api/calendar/update/" + id, {
+            await axios.post("http://192.168.55.44/api/calendar/update/" + id, {
                 start: start,
                 end: end
             })
@@ -492,7 +512,7 @@ export default {
         },
         // ...mapActions(["getCalendar", "addData"]),
         async getListEvent() {
-            await axios.get("http://127.0.0.1:8000/api/events").then((res) => {
+            await axios.get("http://192.168.55.44/api/events").then((res) => {
                 this.eventList = res.data.events
                 // console.log(res.data.events)
             })
@@ -543,21 +563,6 @@ export default {
                 zIndex: 999,
                 revertDuration: 0 //  original position after the drag
             });
-            // let title = prompt('Please enter a new title for your event')
-            // let calendarApi = selectInfo.view.calendar
-
-            // calendarApi.unselect() // clear date selection
-
-            // if (title) {
-            //     this.id = this.id + 1
-            //     calendarApi.addEvent({
-            //         id: this.id,
-            //         title: title,
-            //         start: selectInfo.startStr,
-            //         end: selectInfo.endStr,
-            //         allDay: selectInfo.allDay
-            //     })
-            // }
         },
         async handleEventClick(clickInfo) {
             let choose = prompt('Please select the action to be performed: 1: Edit 2: Delete')
@@ -581,7 +586,7 @@ export default {
 
                     if (title && short_story) {
 
-                        await axios.post('http://127.0.0.1:8000/api/events/update/' + id, {
+                        await axios.post('http://192.168.55.44/api/events/update/' + id, {
                             title: title,
                             short_story: short_story
                         })
@@ -597,7 +602,7 @@ export default {
                     var id = clickInfo.event.id
                     console.log(id)
                     if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-                        await axios.post('http://127.0.0.1:8000/api/calendar/delete/' + id)
+                        await axios.post('http://192.168.55.44/api/calendar/delete/' + id)
                         clickInfo.event.remove()
                     }
                     break;
@@ -609,13 +614,14 @@ export default {
         },
 
         async addEvent() {
-            await axios.post("http://127.0.0.1:8000/api/events/add/", {
+            await axios.post("http://192.168.55.44/api/events/add", {
                 title: this.eventFormAdd.title,
-                short_story: this.eventFormAdd.short_story,
+                short_story: this.eventFormAdd.short_story ? this.eventFormAdd.short_story : 'no description',
                 icon: this.eventFormAdd.icon,
                 color: this.eventFormAdd.color
             })
             await this.getListEvent()
+            this.resetForm()
         }
     },
     computed: {
