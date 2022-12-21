@@ -9,3 +9,6 @@
 - **cd frontend**
 - **npm install**
 - **npm run dev**
+
+## With Server run
+- **Change URL API to <ip-server>**
