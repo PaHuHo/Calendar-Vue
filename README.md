@@ -11,4 +11,4 @@
 - **npm run dev**
 
 ## With Server run
-- **Change URL API to <ip-server>**
+- **Change URL API ip-server**
