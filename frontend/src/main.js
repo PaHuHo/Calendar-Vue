@@ -28,9 +28,13 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+
 // import store from "./views/Calendar/store";
+import Toast from "vue-toastification";
+import "vue-toastification/dist/index.css";
 const app = createApp(App);
 app.use(router);
+app.use(Toast);
 // app.use(CoreuiVue)
 // app.use(Vuex)
 // app.use(store)

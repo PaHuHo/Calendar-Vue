@@ -129,7 +129,7 @@
                                 </ul>
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox" id="drop-remove" class="checkbox style-0">
+                                        <input type="checkbox" id="drop-remove" class="checkbox style-0" v-model="isCheckDelete" value="true">
                                         <span>Delete after adding to calendar</span> </label>
                                 </div>
                             </form>
@@ -228,11 +228,12 @@ import FullCalendar from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
 import { INITIAL_EVENTS, colorTheme, getCalendar, loadIdLast, LAST_ID } from "./event-utils";
+import { useToast } from "vue-toastification";
 // import { CAlert } from '@coreui/vue';
 
 // import { mapGetters } from "vuex";
 // import { mapActions } from "vuex";
-
+const toast = useToast();
 export default {
 
     components: { FooterVue, HeaderVue, FullCalendar },
@@ -248,20 +249,21 @@ export default {
         this.getListEvent()
         this.$nextTick(function () {
             this.makeDraggable()
-            
+
             $('.fc-toolbar-chunk').css({
                 "display": "inline-flex"
             })
             $('.fc .fc-prev-button').css({
                 "padding": "0", "font-size": "18px", "height": "30px", "width": "40px",
             })
-            $('.fc .fc-next-button').css({"padding": "0", "font-size": "18px", "height": "30px", "width": "40px"})
+            $('.fc .fc-next-button').css({ "padding": "0", "font-size": "18px", "height": "30px", "width": "40px" })
         })
     },
     created() {
     },
     data() {
         return {
+            isCheckDelete:false,
             eventFormAdd: {
                 title: '',
                 short_story: '',
@@ -451,19 +453,24 @@ export default {
             this.iconSelect = this.iconPicker[0].id
         },
         async addEventPopIntoCalendar() {
-            await axios.post("http://192.168.55.44/api/calendar/add-new-event", {
-                title: this.eventFormPopAdd.title,
-                short_story: this.eventFormPopAdd.short_story ? this.eventFormPopAdd.short_story : 'no description',
-                icon: this.eventFormPopAdd.icon,
-                color: this.eventFormPopAdd.color,
-                start: this.eventFormPopAdd.start,
-                end: this.eventFormPopAdd.end
-            })
-            await this.getListEvent()
-            this.calendarOptions.events = await getCalendar()
-            this.resetFormPopup()
+            try {
+                await axios.post("http://192.168.55.44/api/calendar/add-new-event", {
+                    title: this.eventFormPopAdd.title,
+                    short_story: this.eventFormPopAdd.short_story ? this.eventFormPopAdd.short_story : 'no description',
+                    icon: this.eventFormPopAdd.icon,
+                    color: this.eventFormPopAdd.color,
+                    start: this.eventFormPopAdd.start,
+                    end: this.eventFormPopAdd.end
+                })
+                await this.getListEvent()
+                this.calendarOptions.events = await getCalendar()
+                this.resetFormPopup()
 
-            $('#createForm').modal('toggle');
+                $('#createForm').modal('toggle');
+            } catch (error) {
+                toast.error(error.response.data.errors.title[0]);
+            }
+
         },
         async addEventIntoCalendar(e) {
             var id = e.draggedEl.getAttribute('data-eventid')
@@ -474,12 +481,12 @@ export default {
                 end: end
             })
             loadIdLast()
-
+          
             // is the "remove after drop" checkbox checked?
-            // if ($('#drop-remove').is(':checked')) {
-            //     // if so, remove the element from the "Draggable Events" list
-            //     $(this).remove();
-            // }
+            if(this.isCheckDelete){
+                await axios.post("http://192.168.55.44/api/events/delete/" + id)
+                await this.getListEvent()
+            }
         },
         makeDraggable() {
 
@@ -614,14 +621,18 @@ export default {
         },
 
         async addEvent() {
-            await axios.post("http://192.168.55.44/api/events/add", {
-                title: this.eventFormAdd.title,
-                short_story: this.eventFormAdd.short_story ? this.eventFormAdd.short_story : 'no description',
-                icon: this.eventFormAdd.icon,
-                color: this.eventFormAdd.color
-            })
-            await this.getListEvent()
-            this.resetForm()
+            try {
+                await axios.post("http://192.168.55.44/api/events/add", {
+                    title: this.eventFormAdd.title,
+                    short_story: this.eventFormAdd.short_story ? this.eventFormAdd.short_story : 'no description',
+                    icon: this.eventFormAdd.icon,
+                    color: this.eventFormAdd.color
+                })
+                await this.getListEvent()
+                this.resetForm()
+            } catch (error) {
+                toast.error(error.response.data.errors.title[0]);
+            }
         }
     },
     computed: {
