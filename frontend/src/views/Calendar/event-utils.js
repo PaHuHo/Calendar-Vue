@@ -35,6 +35,7 @@ export function colorTheme(color) {
 }
 
 export const INITIAL_EVENTS =data
+
 export async function getCalendar() {
   const response = await axios.get("http://192.168.55.44/api/calendar");
   const data = [];

@@ -116,7 +116,7 @@
                                     <li v-for="e in eventList" style="position: relative;" :data-eventid="e.id"
                                         :data-description="e.short_story" :data-icon="e.icon" :data-color="e.color"
                                         :data-title="e.title"
-                                        :class="[(e.color), 'txt-color-white fc-event'].join(' ')">
+                                        :class="[(e.color), 'txt-color-white li-event'].join(' ')">
                                         <span>{{ e.title
                                         }}<br>
                                             <span
@@ -129,7 +129,8 @@
                                 </ul>
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox" id="drop-remove" class="checkbox style-0" v-model="isCheckDelete" value="true">
+                                        <input type="checkbox" id="drop-remove" class="checkbox style-0"
+                                            v-model="isCheckDelete" value="true">
                                         <span>Delete after adding to calendar</span> </label>
                                 </div>
                             </form>
@@ -263,7 +264,7 @@ export default {
     },
     data() {
         return {
-            isCheckDelete:false,
+            isCheckDelete: false,
             eventFormAdd: {
                 title: '',
                 short_story: '',
@@ -481,9 +482,9 @@ export default {
                 end: end
             })
             loadIdLast()
-          
+
             // is the "remove after drop" checkbox checked?
-            if(this.isCheckDelete){
+            if (this.isCheckDelete) {
                 await axios.post("http://192.168.55.44/api/events/delete/" + id)
                 await this.getListEvent()
             }
@@ -492,7 +493,7 @@ export default {
 
             let draggable = document.getElementById('external-events')
             new Draggable(draggable, {
-                itemSelector: ".fc-event",
+                itemSelector: ".li-event",
 
                 eventData: function (eventE1) {
                     var id = LAST_ID
@@ -572,6 +573,7 @@ export default {
             });
         },
         async handleEventClick(clickInfo) {
+
             let choose = prompt('Please select the action to be performed: 1: Edit 2: Delete')
 
             switch (choose) {
