@@ -19,6 +19,7 @@ class CreateEventsTable extends Migration
             $table->string('short_story')->nullable();
             $table->string('icon');
             $table->string('color');
+            $table->string('is_delete')->default(1);
             $table->timestamps();
         });
     }

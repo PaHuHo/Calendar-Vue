@@ -118,7 +118,7 @@
                                         :data-title="e.title"
                                         :class="[(e.color), 'txt-color-white li-event'].join(' ')">
                                         <span>{{ e.title
-                                        }}<br>
+}}<br>
                                             <span
                                                 style="color: #fff;color: rgba(255, 255, 255, .7);font-size: 11px;font-weight: 400;display: block;line-height: 0;margin: 7px 0;text-transform: lowercase;">
                                                 {{ e.short_story }}</span>
@@ -455,7 +455,7 @@ export default {
         },
         async addEventPopIntoCalendar() {
             try {
-                await axios.post("http://192.168.55.44/api/calendar/add-new-event", {
+                await axios.post("http://127.0.0.1:8000/api/calendar/add-new-event", {
                     title: this.eventFormPopAdd.title,
                     short_story: this.eventFormPopAdd.short_story ? this.eventFormPopAdd.short_story : 'no description',
                     icon: this.eventFormPopAdd.icon,
@@ -477,7 +477,7 @@ export default {
             var id = e.draggedEl.getAttribute('data-eventid')
             var start = e.dateStr
             var end = e.dateStr
-            await axios.post("http://192.168.55.44/api/calendar/add/" + id, {
+            await axios.post("http://127.0.0.1:8000/api/calendar/add/" + id, {
                 start: start,
                 end: end
             })
@@ -485,7 +485,7 @@ export default {
 
             // is the "remove after drop" checkbox checked?
             if (this.isCheckDelete) {
-                await axios.post("http://192.168.55.44/api/events/delete/" + id)
+                await axios.post("http://127.0.0.1:8000/api/events/delete/" + id)
                 await this.getListEvent()
             }
         },
@@ -512,7 +512,7 @@ export default {
             var id = e.event.id
             var start = e.event.start
             var end = e.event.end ? e.event.end : e.event.start
-            await axios.post("http://192.168.55.44/api/calendar/update/" + id, {
+            await axios.post("http://127.0.0.1:8000/api/calendar/update/" + id, {
                 start: start,
                 end: end
             })
@@ -520,7 +520,7 @@ export default {
         },
         // ...mapActions(["getCalendar", "addData"]),
         async getListEvent() {
-            await axios.get("http://192.168.55.44/api/events").then((res) => {
+            await axios.get("http://127.0.0.1:8000/api/events").then((res) => {
                 this.eventList = res.data.events
                 // console.log(res.data.events)
             })
@@ -587,6 +587,10 @@ export default {
 
                     var short_story = clickInfo.event.extendedProps.story
                     let temp2 = prompt('Description:', short_story)
+                    if(temp2.length>40){
+                        toast.error("Description tối đa 40 ký tự");
+                        break;
+                    }
                     short_story = temp2 ? temp2 : clickInfo.event.extendedProps.story
 
                     // let calendarApi = clickInfo.view.calendar
@@ -595,7 +599,7 @@ export default {
 
                     if (title && short_story) {
 
-                        await axios.post('http://192.168.55.44/api/events/update/' + id, {
+                        await axios.post('http://127.0.0.1:8000/api/events/update/' + id, {
                             title: title,
                             short_story: short_story
                         })
@@ -611,7 +615,7 @@ export default {
                     var id = clickInfo.event.id
                     console.log(id)
                     if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-                        await axios.post('http://192.168.55.44/api/calendar/delete/' + id)
+                        await axios.post('http://127.0.0.1:8000/api/calendar/delete/' + id)
                         clickInfo.event.remove()
                     }
                     break;
@@ -624,7 +628,7 @@ export default {
 
         async addEvent() {
             try {
-                await axios.post("http://192.168.55.44/api/events/add", {
+                await axios.post("http://127.0.0.1:8000/api/events/add", {
                     title: this.eventFormAdd.title,
                     short_story: this.eventFormAdd.short_story ? this.eventFormAdd.short_story : 'no description',
                     icon: this.eventFormAdd.icon,
@@ -633,7 +637,12 @@ export default {
                 await this.getListEvent()
                 this.resetForm()
             } catch (error) {
-                toast.error(error.response.data.errors.title[0]);
+                console.log(error.response.data)
+               
+                await Object.entries(error.response.data.errors).forEach(([key, value]) => {
+                    toast.error(value.toString());
+                });
+
             }
         }
     },

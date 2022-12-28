@@ -11,4 +11,7 @@
 - **npm run dev**
 
 ## With Server run
+- **Change URL API 127.0.0.1**
+
+## With Server run
 - **Change URL API ip-server**

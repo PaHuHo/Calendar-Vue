@@ -5,17 +5,29 @@ namespace App\Http\Controllers;
 use App\Models\Calendar;
 use App\Models\Events;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
 
 class EventController extends Controller
 {
     public function index(){
-        $events=Events::all();
+        $events=Events::where('is_delete',1)->get();
         return response()->json([
             'events' => $events
         ], 200);
     }
 
     public function add(Request $request){
+
+        $messages = [
+            'title.required' => 'Vui lòng nhập event name',
+            'short_story.max' => 'Short story tối đa 40 ký tự',
+        ];
+        $this->validate($request, [
+            'title' => 'required',
+            'short_story' => 'max:40',
+        ],$messages);
+
         $events=new Events();
         $events->title=$request->title;
         $events->short_story=$request->short_story;
@@ -33,6 +45,14 @@ class EventController extends Controller
         ], 200);
     }
     public function store(Request $request, $id){
+        $messages = [
+            'title.required' => 'Vui lòng nhập event name',
+            'short_story.max' => 'Short story tối đa 40 ký tự',
+        ];
+        $this->validate($request, [
+            'title' => 'required',
+            'short_story' => 'max:40',
+        ],$messages);
         $calendar=Calendar::find($id);
         $events=Events::find($calendar->event_id);
         $events->title=$request->title;
@@ -44,11 +64,11 @@ class EventController extends Controller
     }
 
     public function delete( $id){
-        $calendar=Calendar::where('event_id',$id)->delete();
-        $events=Events::find($id);
-        $events->delete();
+        $event=Events::find($id);
+        $event->is_delete=0;
+        $event->save();
         return response()->json([
-            'events' => $events
+            'events' => $event
         ], 200);
     }
 }

@@ -37,7 +37,7 @@ export function colorTheme(color) {
 export const INITIAL_EVENTS =data
 
 export async function getCalendar() {
-  const response = await axios.get("http://192.168.55.44/api/calendar");
+  const response = await axios.get("http://127.0.0.1:8000/api/calendar");
   const data = [];
   response.data.calendar.forEach(function (currentValue, index, arr) {
     data.push({
@@ -60,7 +60,7 @@ export async function loadIdLast(){
   LAST_ID= await getLastId()
 }
 async function getLastId() {
-  const response = await axios.get("http://192.168.55.44/api/calendar");
+  const response = await axios.get("http://127.0.0.1:8000/api/calendar");
   const id = response.data.lastCalendarId;
   
   return id.id;
